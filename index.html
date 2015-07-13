@@ -1,0 +1,82 @@
+<html>
+<head>
+	<script>
+		function SimpleChat() {
+			this.CHAT_SERVER_URL = 'ws://lvm';
+			this.CHAT_SERVER_PORT = '8080';
+
+			this.connect = function() {
+				var _self = this;
+				this.socket = new WebSocket( this.CHAT_SERVER_URL + ':' + this.CHAT_SERVER_PORT );
+
+				this.socket.onopen = function() {
+					_self.outputText( 'Connected' );
+				}
+
+				this.socket.onmessage = function( event ) {
+					_self.outputText( event.data );
+				}
+
+				this.socket.onclose = function() {
+					_self.outputText( 'Disconnected' );
+				}
+			}
+
+			this.disconnect = function() {
+				if( this.socket ) {
+					this.socket.close();
+					this.socket = null;
+				}
+			}
+
+			this.outputText = function( text ) {
+				var div = document.getElementById( 'outputDiv' );
+				div.innerHTML = div.innerHTML + text + '<br>';
+			}
+
+			this.send = function() {
+				var inputText = document.getElementById( 'inputText' );
+				if( this.socket ) {
+					this.socket.send( inputText.value );
+					inputText.value = '';
+				}
+			}
+		}
+
+		window.sc = new SimpleChat();
+
+	</script>
+
+	<style>
+		#outputDiv {
+			width: auto;
+			height: 300px;
+			overflow-y: auto;
+			border: 1px solid grey;
+			margin-top: 10px;
+			margin-bottom: 10px;
+			padding: 10px;
+		}
+
+		#inputText {
+			width: 80%;
+		}
+	</style>
+
+	<title>Simple Chat</title>
+</head>
+<body>
+	<h1>Simple Chat</h1>
+	<div>
+		<button type="button" onclick="sc.connect()">Connect</button>
+		<button type="button" onclick="sc.disconnect()">Disconnect</button>
+	</div>
+
+	<div id="outputDiv">
+	</div>
+
+	<div>
+		<input id="inputText" type="text">
+		<button type="button" onclick="sc.send()">Send Message</button>
+	</div>
+</body>

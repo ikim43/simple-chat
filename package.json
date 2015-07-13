@@ -1,0 +1,9 @@
+{
+  "name": "simple-chat",
+  "version": "1.0.0",
+  "description": "A basic chat program using the ws package and HTML5 WebSockets",
+  "author": "Nicholas Cowan <ncowan15@hotmail.com>",
+  "dependencies": {
+    "ws": "^0.7.2"
+  }
+}
